@@ -1,0 +1,267 @@
+//کلاس‌های Abstract در زبان سی‌شارپ (C#) به کلاس‌هایی گفته می‌شود که نمی‌توان مستقیماً از آنها شیء (Object) ایجاد کرد. این کلاس‌ها به عنوان پایه برای سایر کلاس‌ها عمل می‌کنند و می‌توانند متدهایی داشته باشند که باید در کلاس‌های فرزند (Subclasses) پیاده‌سازی شوند. به عبارت دیگر، یک کلاس Abstract معمولاً شامل پیاده‌سازی ناقص متدهایی است که در کلاس‌های فرزند تکمیل می‌شوند.
+
+//ساختار یک کلاس Abstract:
+
+using System;
+
+public abstract class Animal
+{
+    // متد abstract (بدون پیاده‌سازی)
+    public abstract void MakeSound();
+
+    // متد معمولی (با پیاده‌سازی)
+    public void Eat()
+    {
+        Console.WriteLine("The animal is eating.");
+    }
+}
+public class Dog : Animal
+{// پیاده‌سازی متد abstract
+    public override void MakeSound()
+    {Console.WriteLine("Bark");
+    }
+}
+public class Program
+{public static void Main()
+    {
+        // نمی‌توانیم شیء از کلاس abstract بسازیم
+        // Animal myAnimal = new Animal();  // خطای کامپایل
+
+        Dog myDog = new Dog();
+        myDog.MakeSound();  // خروجی: Bark
+        myDog.Eat();        // خروجی: The animal is eating.
+    }
+}
+
+//کلاس‌های Sealed در زبان سی‌شارپ (C#) کلاس‌هایی هستند که نمی‌توانند ارث‌بری شوند. به عبارت دیگر، وقتی یک کلاس به صورت sealed تعریف می‌شود، هیچ کلاسی نمی‌تواند از آن کلاس وراثت بگیرد. این ویژگی به برنامه‌نویس این امکان را می‌دهد که از تغییرات غیرمنتظره در کلاس‌های فرزند جلوگیری کند.
+//نحوه تعریف یک کلاس Sealed:
+
+using System;
+public sealed class Car
+{public void Start()
+    {Console.WriteLine("The car is starting.");
+    }
+}
+// این خط کامپایل نمی‌شود
+// public class SportsCar : Car { }  // خطا: نمی‌توان از کلاس Sealed ارث‌بری کرد
+public class Program
+{
+    public static void Main()
+    {
+        Car myCar = new Car();
+        myCar.Start();  // خروجی: The car is starting.
+    }
+}
+
+//کلاس‌های Partial در زبان سی‌شارپ (C#) به شما این امکان را می‌دهند که یک کلاس را به چند بخش مختلف تقسیم کنید و هر بخش را در فایل‌های مختلف تعریف کنید. به عبارت دیگر، می‌توانید کلاس‌های خود را در چند فایل مختلف تعریف کنید و این فایل‌ها در زمان کامپایل به یک کلاس واحد ترکیب شوند. این ویژگی به خصوص زمانی مفید است که پروژه‌های بزرگ دارید یا نیاز به جدا کردن منطق‌های مختلف کلاس در فایل‌های مختلف دارید
+//نحوه استفاده از Partial Class:
+برای استفاده از partial class، کافی است از کلمه‌کلیدی partial قبل از تعریف کلاس استفاده کنید و آن را در فایل‌های مختلف قرار دهید.
+
+//مثال:
+
+//فایل اول: Person.Part1.cs
+
+// Partial class in the first file
+public partial class Person
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+
+    public void DisplayName()
+    {
+        Console.WriteLine($"Name: {FirstName} {LastName}");
+    }
+}
+
+//فایل دوم: Person.Part2.cs
+
+// Partial class in the second file
+public partial class Person
+{
+    public int Age { get; set; }
+    
+    public void DisplayAge()
+    {
+        Console.WriteLine($"Age: {Age}");
+    }
+}
+
+//فایل اصلی: Program.cs
+
+using System;
+
+public class Program
+{
+    public static void Main()
+    {
+        Person person = new Person();
+        person.FirstName = "John";
+        person.LastName = "Doe";
+        person.Age = 30;
+
+        person.DisplayName();  // خروجی: Name: John Doe
+        person.DisplayAge();   // خروجی: Age: 30
+    }
+}
+
+//پلی مورفیسم (Polymorphism) در سی شارپ یک مفهوم اساسی در برنامه‌نویسی شیء‌گرا است که به معنی "چندریختی" یا "چند شکلی" می‌باشد. به طور ساده، پلی‌مورفیسم این امکان را به شما می‌دهد که یک عمل (متد) واحد را به شکل‌های مختلف برای انواع مختلف داده‌ها یا اشیاء پیاده‌سازی کنید.
+Matin Zed, [۱۹.۱۱.۲۴ ۲۱:۵۵]
+//انواع پلی‌مورفیسم:
+
+//1 پلی‌مورفیسم زمان کامپایل (Compile-time Polymorphism): این نوع پلی‌مورفیسم شامل اورلود (Method Overloading) و اوور راید (Method Overriding) در زمان کامپایل است. به عبارت دیگر، تصمیم‌گیری در مورد اینکه کدام متد اجرا شود، قبل از اجرای برنامه صورت می‌گیرد.
+اورلودینگ متد (Method Overloading): در این حالت، چند متد با نام یکسان ولی با پارامترهای مختلف تعریف می‌شود.
+
+class Calculator
+{
+    public int Add(int a, int b) { return a + b; }
+    public double Add(double a, double b) { return a + b; }
+}
+
+
+
+//2. پلی‌مورفیسم زمان اجرا (Runtime Polymorphism): این نوع پلی‌مورفیسم بیشتر مرتبط با اوور رایدینگ (Method Overriding) و استفاده از کلاس‌های پایه و مشتق شده است. در این حالت، تصمیم‌گیری درباره اینکه کدام متد اجرا شود، در زمان اجرا و با توجه به نوع واقعی شیء صورت می‌گیرد.
+اووررایدینگ متد (Method Overriding): در این حالت، متدی که در یک کلاس پایه تعریف شده است، در کلاس‌های مشتق شده بازنویسی می‌شود.
+
+class Animal
+{
+    public virtual void MakeSound() 
+    {
+        Console.WriteLine("Animal sound");
+    }
+}
+
+class Dog : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Bark");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Animal myAnimal = new Dog();
+        myAnimal.MakeSound(); // خروجی: Bark
+    }
+}
+
+//در مثال بالا، متد MakeSound در کلاس Dog که از Animal مشتق شده، بازنویسی شده است. وقتی شیء از نوع Animal ولی با محتوای واقعی Dog فراخوانی می‌شود، متد MakeSound مربوط به Dog اجرا می‌شود.
+
+//در سی‌شارپ، اووررایدینگ (Overriding) به فرآیند بازنویسی متدها در کلاس‌های مشتق شده از کلاس‌های پایه گفته می‌شود. زمانی که یک کلاس پایه یک متد را تعریف می‌کند، کلاس‌های مشتق شده می‌توانند این متد را به شکلی خاص خود بازنویسی کنند تا رفتار دلخواه خود را پیاده‌سازی کنند.
+Matin Zed, [۱۹.۱۱.۲۴ ۲۱:۵۸]
+//مثال:
+//فرض کنید کلاس Animal یک متد MakeSound دارد که می‌خواهیم آن را در کلاس‌های مشتق شده تغییر دهیم.
+
+using System;
+
+class Animal
+{
+    // متد با کلمه‌کلیدی virtual که قابل اوورراید است
+    public virtual void MakeSound()
+    {
+        Console.WriteLine("Animal makes a sound");
+    }
+}
+
+class Dog : Animal
+{
+    // بازنویسی متد در کلاس مشتق شده
+    public override void MakeSound()
+    {
+        Console.WriteLine("Dog barks");
+    }
+}
+
+class Cat : Animal
+{
+    // بازنویسی متد در کلاس مشتق شده
+    public override void MakeSound()
+    {Console.WriteLine("Cat meows");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Animal myDog = new Dog();  // شی از کلاس Dog
+        myDog.MakeSound(); // خروجی: Dog barks
+        Animal myCat = new Cat();  // شی از کلاس Cat
+        myCat.MakeSound(); // خروجی: Cat meows
+    }
+
+    //در زبان سی‌شارپ، آرایه (Array) یک ساختار داده‌ای است که به شما این امکان را می‌دهد تا مجموعه‌ای از داده‌ها را از یک نوع خاص (مثل اعداد صحیح، رشته‌ها، یا هر نوع داده دیگری) در یک مکان ذخیره کنید. آرایه‌ها به شما کمک می‌کنند که به راحتی به داده‌های متعدد دسترسی پیدا کنید و آنها را مدیریت کنید.
+    نحوه ایجاد و استفاده از آرایه‌ها:
+
+1. تعریف و ایجاد آرایه: برای ایجاد یک آرایه، باید نوع داده آرایه، سپس اندازه آن را مشخص کنید.
+
+int[] numbers = new int[5];  // آرایه‌ای از 5 عدد صحیح
+
+در اینجا، آرایه numbers ۵ عنصر از نوع int را در خود جای می‌دهد و تمام این عناصر در ابتدا با مقدار پیش‌فرض 0 پر شده‌اند.
+
+
+2. مقداردهی به عناصر آرایه: شما می‌توانید به هر عنصر آرایه از طریق ایندکس (شاخص) دسترسی داشته باشید. ایندکس‌ها در آرایه‌ها از 0 شروع می‌شوند.
+
+numbers[0] = 10;  // اولین عنصر آرایه را به 10 تغییر می‌دهیم
+numbers[1] = 20;  // دومین عنصر آرایه را به 20 تغییر می‌دهیم
+numbers[2] = 30;  // سومین عنصر آرایه را به 30 تغییر می‌دهیم
+
+
+3. دسترس به عناصر آرایه: برای دسترسی به هر عنصر آرایه، می‌توانید از ایندکس آن استفاده کنید.
+
+Console.WriteLine(numbers[0]);  // خروجی: 10
+Console.WriteLine(numbers[1]);  // خروجی: 20
+4. ایجاد و مقداردهی مستقیم آرایه‌ها: شما می‌توانید هنگام ایجاد آرایه، به آن مقادیر اولیه هم بدهید.
+
+int[] numbers = { 10, 20, 30, 40, 50 };  // آرایه با 5 مقدار اولیه
+
+
+5. طول آرایه: برای پیدا کردن طول آرایه (تعداد عناصر آن)، از خاصیت Length استفاده می‌شود.
+
+Console.WriteLine(numbers.Length);  // خروجی: 5
+
+
+
+انواع آرایه‌ها:
+1. آرایه‌های یک‌بعدی: ساده‌ترین نوع آرایه است که شامل یک ردیف از داده‌ها است.
+int[] numbers = { 1, 2, 3, 4, 5 };
+2. آرایه‌های چندبعدی: آرایه‌هایی که بیشتر از یک بعد دارند (مثلاً ماتریس‌ها).
+آرایه 2 بعدی (ماتریس):
+int[,] matrix = new int[3, 3] { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
+برای دسترسی به عناصر آن:
+Console.WriteLine(matrix[0, 0]);  // خروجی: 1
+آرایه 3 بعدی:
+int[,,] cube = new int[2, 2, 2];
+
+3. آرایه‌های جاغه‌دار (Jagged Arrays): آرایه‌های جاغه‌دار، آرایه‌هایی هستند که هر ردیف (بعد) اندازه متفاوتی دارند. به عبارت دیگر، این نوع آرایه‌ها می‌توانند آرایه‌های دیگر را به عنوان عناصر خود داشته باشند.
+int[][] jaggedArray = new int[3][];
+jaggedArray[0] = new int[] { 1, 2 };
+jaggedArray[1] = new int[] { 3, 4, 5 };
+jaggedArray[2] = new int[] { 6, 7, 8, 9 };
+برای دسترسی به عناصر:
+
+Console.WriteLine(jaggedArray[1][2]);  // خروجی: 5
+استفاده از آرایه‌ها در حلقه‌ها:
+آرایه‌ها معمولاً با حلقه‌ها برای انجام عملیات مختلف مانند پیمایش و پردازش عناصر استفاده می‌شوند.
+مثال استفاده از for برای پیمایش یک آرایه:
+
+int[] numbers = { 10, 20, 30, 40, 50 };
+for (int i = 0; i < numbers.Length; i++)
+{
+    Console.WriteLine(numbers[i]);
+}
+
+متدهای مفید برای کار با آرایه‌ها:
+1. Array.Sort(): برای مرتب‌سازی آرایه استفاده می‌شود.
+int[] numbers = { 5, 3, 8, 1 };
+Array.Sort(numbers);  // آرایه را مرتب می‌کند
+2. Array.Reverse(): برای معکوس کردن ترتیب عناصر آرایه استفاده می‌شود.
+Array.Reverse(numbers);  // ترتیب آرایه را معکوس می‌کند
+3. Array.Copy(): برای کپی کردن عناصر یک آرایه به آرایه دیگر.
+int[] copyArray = new int[5];
+Array.Copy(numbers, copyArray, numbers.Length);
+}
+
+
